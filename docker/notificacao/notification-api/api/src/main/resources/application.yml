@@ -1,0 +1,55 @@
+## Jackson setup
+spring:
+  profiles:
+    active: local
+  jackson:
+    default-property-inclusion: non_null
+    mapper:
+      accept-case-insensitive-enums: true
+
+  jmx:
+    enabled: false
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgres
+    username: postgres
+    password: 1
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  # main:
+  #   lazy-initialization: true
+  # data:
+  #   jpa:
+  #     repositories:
+  #       bootstrap-mode: lazy
+
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+
+  mail:
+    host: localhost
+    port: 1025
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9090/realms/master
+
+
+api:
+  send-email: true
+  mail-domain: notification@test.com
+
+# Startup optimizations
+#spring.main.lazy-initialization=true
+#spring.data.jpa.repositories.bootstrap-mode=lazy
+#spring.mail.username=pdsa.notificacoes@gmail.com
+#spring.mail.password=fgmhhxzkvhdsmobe
+#spring.mail.properties.mail.smtp.auth=true
+

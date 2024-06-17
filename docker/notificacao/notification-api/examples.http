@@ -1,0 +1,47 @@
+POST {{keycloak_url}}/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id=some-service&client_secret=2JGrGVMrXWYMQ5SYLS4DjvTYPZPljiUm
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+### Test
+POST {{api_url}}/v1/clients/me
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "categories": [
+    {
+      "id": "suino",
+      "name": "Suino"
+    },
+    {
+      "id": "aves",
+      "name": "Aves"
+    }
+  ],
+  "channels": [
+    {
+      "id": "laudo_neg_suino",
+      "name": "Laudo Negativo Emitido",
+      "description": "Notificar quanto laboratorio emitir um laudo com todos os resultados negativos",
+      "groupId": "suino"
+    },
+    {
+      "id": "laudo_pos_aves",
+      "name": "Laudo Positivo Emitido",
+      "description": "Notificar quanto laboratorio emitir um laudo que contem um resultado positivo",
+      "importance": "high",
+      "groupId": "aves"
+    }
+  ]
+}
+
+> {%
+    client.test("Status code is 201", () => {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}

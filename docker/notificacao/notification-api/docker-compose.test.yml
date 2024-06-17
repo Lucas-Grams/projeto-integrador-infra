@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres/api
+      SPRING_DATASOURCE_USERNAME: api
+      SPRING_DATASOURCE_PASSWORD: api
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      KEYCLOAK_AUTH_SERVER_URL: http://keycloak:8080/auth
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - keycloak

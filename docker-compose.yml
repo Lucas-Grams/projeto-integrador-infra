@@ -1,0 +1,131 @@
+version: '3'
+
+networks:
+  pnip:
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24
+
+services:
+  ## postgres
+  postgres:
+    build: ./docker/db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/db/dummy_dump.sql.gz:/docker-entrypoint-initdb.d/dummy_dump.sql.gz
+      - ./docker/db/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5434:5432
+    networks:
+      pnip:
+        ipv4_address: 172.31.0.2
+
+  ## keycloak
+  keycloak:
+    build: ./docker/keycloak
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: 172.31.0.2
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./docker/keycloak/data:/opt/keycloak/data
+    ports:
+      - 8098:8080
+      - 9991:9990
+    networks:
+      pnip:
+        ipv4_address: 172.31.0.3
+  #processos
+  documento:
+    image: registry.gitlab.com/pdsa-rs/api/processos-api:master
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://172.31.0.2:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      API_APP_HOME: /home
+      API_ISSUER_NAME: Plataforma Nacional da Industria do Pescado
+      API_ISSUER_VALIDATOR_URL: http://localhost:4200/validar
+      API_BASE_URL: http://localhost:8088
+      KEYCLOAK_AUTH_SERVER_URL: http://172.31.0.3:8080
+      KEYCLOAK_REALM: pnip-local
+      KEYCLOAK_RESOURCE: pnip-api
+      KEYCLOAK_CREDENTIALS_SECRET: OFv9e0pPJj3hqgQLaYso9nH1b2EeeXLV
+      SERVER_PORT: 8088
+
+    ports:
+      - 8088:8088
+    networks:
+      pnip:
+        ipv4_address: 172.31.0.4
+
+  #notificacao
+  notificacao:
+    build: ./docker/notificacao
+    command:
+      - ./gradlew
+      - api:bootRun
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://172.31.0.2:5432/notificacao
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_RABBITMQ_HOST: 172.31.0.7
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      SPRING_MAIL_HOST: 172.31.0.6
+      SPRING_MAIL_PORT: 1025
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://172.31.0.3:8080/realms/pnip-local
+    ports:
+      - 8081:8080
+    networks:
+      pnip:
+        ipv4_address: 172.31.0.5
+
+  #mailhog
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+    networks:
+      pnip:
+        ipv4_address: 172.31.0.6
+  #rabitmq
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      pnip:
+        ipv4_address: 172.31.0.7
+  s3server:
+    image: scality/s3server:latest
+    container_name: s3server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    networks:
+      pnip:
+        ipv4_address: 172.31.0.8
+    volumes:
+      - s3data:/usr/src/app/localData
+      - s3metadata:/usr/src/app/localMetadata
+    environment:
+      - SCALITY_ACCESS_KEY_ID=EpUvP8IMIxQ7LxvOu6zVIAAj5xEufg
+      - SCALITY_SECRET_ACCESS_KEY=RUPCd1bIghaj535p74wiUOvZj26ES5
+      - SSL="FALSE"
+  #    - ENDPOINT=200.132.200.113
+volumes:
+  postgres_data:
+  s3data:
+  s3metadata:
+

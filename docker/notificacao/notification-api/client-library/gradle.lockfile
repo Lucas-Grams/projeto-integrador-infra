@@ -1,0 +1,29 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.fasterxml.jackson.core:jackson-annotations:2.14.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.core:jackson-core:2.14.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.core:jackson-databind:2.14.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson:jackson-bom:2.14.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.github.scribejava:scribejava-apis:8.3.3=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.github.scribejava:scribejava-core:8.3.3=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.github.scribejava:scribejava-java8:8.3.3=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.github.spotbugs:spotbugs-annotations:4.7.3=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.google.code.findbugs:jsr305:3.0.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apache.httpcomponents.client5:httpclient5-fluent:5.2.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apache.httpcomponents.client5:httpclient5:5.2.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apache.httpcomponents.core5:httpcore5-h2:5.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apache.httpcomponents.core5:httpcore5:5.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apiguardian:apiguardian-api:1.1.2=testCompileClasspath
+org.junit.jupiter:junit-jupiter-api:5.8.1=testCompileClasspath
+org.junit.jupiter:junit-jupiter-api:5.9.1=testRuntimeClasspath
+org.junit.jupiter:junit-jupiter-engine:5.9.1=testRuntimeClasspath
+org.junit.platform:junit-platform-commons:1.8.1=testCompileClasspath
+org.junit.platform:junit-platform-commons:1.9.1=testRuntimeClasspath
+org.junit.platform:junit-platform-engine:1.9.1=testRuntimeClasspath
+org.junit:junit-bom:5.8.1=testCompileClasspath
+org.junit:junit-bom:5.9.1=runtimeClasspath,testRuntimeClasspath
+org.opentest4j:opentest4j:1.2.0=testCompileClasspath,testRuntimeClasspath
+org.projectlombok:lombok:1.18.26=compileClasspath
+org.slf4j:slf4j-api:2.0.5=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,testAnnotationProcessor
